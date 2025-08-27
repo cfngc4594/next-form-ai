@@ -4,6 +4,7 @@ import { useFormFlexLayoutStore } from "@/modules/form/stores/form-flexlayout-st
 import { IChangeEvent } from "@rjsf/core";
 import Form from "@rjsf/shadcn";
 import validator from "@rjsf/validator-ajv8";
+import confetti from "canvas-confetti";
 import { useCallback } from "react";
 
 export const FormRenderer = () => {
@@ -19,6 +20,21 @@ export const FormRenderer = () => {
 
   const onSubmit = useCallback(({ formData }: IChangeEvent) => {
     console.log("Form submitted:", formData);
+
+    confetti({
+      particleCount: 150,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0 },
+      colors: ["#26ccff", "#a25afd", "#ff5e7e", "#88ff5a", "#fcff42"],
+    });
+    confetti({
+      particleCount: 150,
+      angle: 120,
+      spread: 55,
+      origin: { x: 1 },
+      colors: ["#26ccff", "#a25afd", "#ff5e7e", "#88ff5a", "#fcff42"],
+    });
   }, []);
 
   return (
