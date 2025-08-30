@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
 const Page = () => {
-  redirect("/form");
+  redirect("/chat");
 };
 
 export default Page;
