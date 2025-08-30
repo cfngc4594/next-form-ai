@@ -102,7 +102,7 @@ const Page = () => {
                               key={index}
                               className={cn(
                                 "group-[.is-user]:rounded-[24px] group-[.is-user]:bg-secondary group-[.is-user]:text-foreground",
-                                "group-[.is-assistant]:bg-transparent group-[.is-assistant]:p-0 group-[.is-assistant]:text-foreground"
+                                "group-[.is-assistant]:bg-transparent group-[.is-assistant]:p-0 group-[.is-assistant]:text-foreground",
                               )}
                             >
                               <Response>{part.text}</Response>
@@ -116,6 +116,12 @@ const Page = () => {
                             </Reasoning>
                           );
                         case "tool-generateForm":
+                          const constructValidOutput = {
+                            jsonSchema: {},
+                            uiSchema: {},
+                            formData: {},
+                            ...(part.input || {}),
+                          };
                           return (
                             <Tool key={index} defaultOpen>
                               <ToolHeader type={part.type} state={part.state} />
@@ -124,23 +130,9 @@ const Page = () => {
                                 <ToolOutput
                                   errorText={part.errorText}
                                   output={
-                                    part.state === "output-available" &&
-                                    isValidFormOutput(part.output) ? (
+                                    isValidFormOutput(constructValidOutput) ? (
                                       <FormDisplay
-                                        data={part.output}
-                                        onFormSubmit={(formData) => {
-                                          const submissionPrompt =
-                                            "The user has submitted a form with the following data. " +
-                                            "Analyze the data and our conversation history, then call the most appropriate tool to proceed.\n\n" +
-                                            "Submitted Data:\n" +
-                                            "```json\n" +
-                                            JSON.stringify(formData, null, 2) +
-                                            "\n```";
-
-                                          sendMessage({
-                                            text: submissionPrompt,
-                                          });
-                                        }}
+                                        data={constructValidOutput}
                                       />
                                     ) : null
                                   }

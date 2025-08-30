@@ -5,6 +5,7 @@ import Form from "@rjsf/shadcn";
 import { type RJSFSchema, type UiSchema } from "@rjsf/utils";
 import validator from "@rjsf/validator-ajv8";
 import { useCallback, useState } from "react";
+import { formSubmit } from "./form-submit";
 
 interface FormData {
   [key: string]: unknown;
@@ -29,24 +30,14 @@ export const isValidFormOutput = (output: unknown): output is FormOutput => {
 
 interface FormDisplayProps {
   data: FormOutput;
-  onFormSubmit: (formData: FormData) => void;
 }
 
-export const FormDisplay = ({ data, onFormSubmit }: FormDisplayProps) => {
+export const FormDisplay = ({ data }: FormDisplayProps) => {
   const [formData, setFormData] = useState(data.formData || {});
 
   const onFormDataChange = useCallback(({ formData }: IChangeEvent) => {
     setFormData(formData || {});
   }, []);
-
-  const onSubmit = useCallback(
-    ({ formData }: IChangeEvent) => {
-      if (formData) {
-        onFormSubmit(formData);
-      }
-    },
-    [onFormSubmit]
-  );
 
   return (
     <div className="h-full flex flex-col">
@@ -57,7 +48,9 @@ export const FormDisplay = ({ data, onFormSubmit }: FormDisplayProps) => {
           formData={formData}
           validator={validator}
           onChange={onFormDataChange}
-          onSubmit={onSubmit}
+          onSubmit={async () => {
+            await formSubmit(formData);
+          }}
         />
       </div>
     </div>
