@@ -1,11 +1,11 @@
 "use client";
 
+import { formSubmit } from "@/app/actions";
 import { IChangeEvent } from "@rjsf/core";
 import Form from "@rjsf/shadcn";
 import { type RJSFSchema, type UiSchema } from "@rjsf/utils";
 import validator from "@rjsf/validator-ajv8";
 import { useCallback, useState } from "react";
-import { formSubmit } from "./form-submit";
 
 interface FormData {
   [key: string]: unknown;
